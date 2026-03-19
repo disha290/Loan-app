@@ -63,11 +63,9 @@ h1 {
 """, unsafe_allow_html=True)
 
 # -------------------- LOAD FILES --------------------
-import joblib
-
 model = joblib.load("loan_approval_model.pkl")
 model_columns = joblib.load("model_columns.pkl")
-label_encoders = joblib.load("scaler.pkl")
+
 
 # -------------------- MAIN CARD START --------------------
 st.markdown("<div class='main-card'>", unsafe_allow_html=True)
@@ -117,9 +115,8 @@ if submit:
     })
 
     # Label Encoding
-    for col, le in label_encoders.items():
-        if col in input_data.columns:
-            input_data[col] = le.transform(input_data[col])
+    # Convert categorical variables using get_dummies
+    input_data = pd.get_dummies(input_data)
 
     # Align columns
     input_data = input_data.reindex(columns=model_columns, fill_value=0)
