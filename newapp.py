@@ -63,9 +63,9 @@ h1 {
 """, unsafe_allow_html=True)
 
 # -------------------- LOAD FILES --------------------
-model = joblib.load("D:/final dkd/loan_approval_model.pkl")
-model_columns = joblib.load("D:/final dkd/model_columns.pkl")
-label_encoders = joblib.load("D:/final dkd/scaler.pkl")
+model = joblib.load("loan_approval_model.pkl")
+model_columns = joblib.load("model_columns.pkl")
+label_encoders = joblib.load("scaler.pkl")
 
 # -------------------- MAIN CARD START --------------------
 st.markdown("<div class='main-card'>", unsafe_allow_html=True)
