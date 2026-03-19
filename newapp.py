@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import joblib
-import numpy as np
 
 # -------------------- PAGE CONFIG --------------------
 st.set_page_config(
@@ -64,9 +63,9 @@ h1 {
 """, unsafe_allow_html=True)
 
 # -------------------- LOAD FILES --------------------
-model = joblib.load("loan_approval_model.pkl")
-model_columns = joblib.load("model_columns.pkl")
-
+model = joblib.load("D:/final dkd/loan_approval_model.pkl")
+model_columns = joblib.load("D:/final dkd/model_columns.pkl")
+label_encoders = joblib.load("D:/final dkd/scaler.pkl")
 
 # -------------------- MAIN CARD START --------------------
 st.markdown("<div class='main-card'>", unsafe_allow_html=True)
@@ -114,18 +113,11 @@ if submit:
         'Credit_History': [Credit_History],
         'Property_Area': [Property_Area]
     })
-    # Feature engineering (same as training)
-    input_data['Total_Income'] = input_data['ApplicantIncome'] + input_data['CoapplicantIncome']
-
-    input_data['LoanAmount_log'] = np.log1p(input_data['LoanAmount'])
-
-    input_data['Total_Income_log'] = np.log1p(input_data['Total_Income'])
-
-    input_data['Dependents'] = input_data['Dependents'].replace('3+', 3).astype(int)
 
     # Label Encoding
-    # Convert categorical variables using get_dummies
-    input_data = pd.get_dummies(input_data)
+    for col, le in label_encoders.items():
+        if col in input_data.columns:
+            input_data[col] = le.transform(input_data[col])
 
     # Align columns
     input_data = input_data.reindex(columns=model_columns, fill_value=0)
