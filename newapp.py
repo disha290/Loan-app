@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import numpy as np
 
 # -------------------- PAGE CONFIG --------------------
 st.set_page_config(
@@ -113,6 +114,14 @@ if submit:
         'Credit_History': [Credit_History],
         'Property_Area': [Property_Area]
     })
+    # Feature engineering (same as training)
+    input_data['Total_Income'] = input_data['ApplicantIncome'] + input_data['CoapplicantIncome']
+
+    input_data['LoanAmount_log'] = np.log1p(input_data['LoanAmount'])
+
+    input_data['Total_Income_log'] = np.log1p(input_data['Total_Income'])
+
+    input_data['Dependents'] = input_data['Dependents'].replace('3+', 3).astype(int)
 
     # Label Encoding
     # Convert categorical variables using get_dummies
